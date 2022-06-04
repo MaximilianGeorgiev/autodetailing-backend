@@ -91,7 +91,7 @@ CREATE TABLE "AutoDetailing"."OrderProduct"
   (order_id integer NOT NULL, product_id integer NOT NULL);
 
 CREATE TABLE "AutoDetailing"."Category"(
-category_id serial NOT NULL, category_name integer NOT NULL,
+category_id serial NOT NULL, category_name varchar NOT NULL,
   CONSTRAINT "Category_pkey" PRIMARY KEY(category_id)
 );
 

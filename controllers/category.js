@@ -8,7 +8,7 @@ exports.getAllCategories = (request, response) => {
 };
 
 exports.getCategoryById = (request, response) => {
-    if (isNaN(request?.params?.id)) {
+    if (!request?.params?.id || isNaN(request?.params?.id) || request?.params?.id < 0) {
         response.status(404).json({ status: "failed", reason: "category_id is invalid" });
         return;
     }
@@ -33,7 +33,7 @@ exports.createCategory = (request, response) => {
         return;
     }
 
-    pool.query('INSERT INTO "AutoDetailing"."Categroy" (category_name) VALUES ($1)', [request.body.name])
+    pool.query('INSERT INTO "AutoDetailing"."Category" (category_name) VALUES ($1)', [request.body.name])
         .then((res) => response.status(200).json({ status: "success" }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };

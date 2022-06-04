@@ -8,7 +8,7 @@ exports.getAllRoles = (request, response) => {
 };
 
 exports.getRoleById = (request, response) => {
-    if (isNaN(request?.params?.id)) {
+    if (!request?.params?.id || isNaN(request?.params?.id) || request?.params?.id < 0) {
         response.status(404).json({ status: "failed", reason: "role_id is invalid" });
         return;
     }
@@ -28,6 +28,7 @@ exports.getRoleByName = (request, response) => {
 };
 
 exports.createRole = (request, response) => {
+    console.log("kur" + request.body.name);
     if (!request?.body || !request?.body?.name || request?.body?.name === "") {
         response.status(400).json({ status: "failed", reason: "role_name is invalid" });
         return;
