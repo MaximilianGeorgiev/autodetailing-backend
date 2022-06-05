@@ -28,7 +28,6 @@ exports.getRoleByName = (request, response) => {
 };
 
 exports.createRole = (request, response) => {
-    console.log("kur" + request.body.name);
     if (!request?.body || !request?.body?.name || request?.body?.name === "") {
         response.status(400).json({ status: "failed", reason: "role_name is invalid" });
         return;
