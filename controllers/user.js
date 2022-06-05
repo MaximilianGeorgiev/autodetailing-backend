@@ -2,13 +2,13 @@ const pool = require("../database.js");
 const StringUtils = require("../utils/string.js");
 
 exports.getAllUsers = (request, response) => {
-    pool.query('SELECT "AutoDetailing"."Users".*, role_name FROM "AutoDetailing"."Users" JOIN "AutoDetailing"."UserRole" ON "AutoDetailing"."Users".user_id  = "AutoDetailing"."Users".user_id JOIN "AutoDetailing"."Role" ON "AutoDetailing"."UserRole".role_id = "AutoDetailing"."Role".role_id')
+    pool.query('SELECT * FROM "AutoDetailing"."Users"')
         .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
 exports.getUsersByRoleName = (request, response) => {
-    pool.query('SELECT "AutoDetailing"."Users".*, role_name FROM "AutoDetailing"."Users" JOIN "AutoDetailing"."UserRole" ON "AutoDetailing"."Users".user_id  = "AutoDetailing"."Users".user_id JOIN "AutoDetailing"."Role" ON "AutoDetailing"."UserRole".role_id = "AutoDetailing"."Role".role_id WHERE "AutoDetailing"."Role".role_name = $1', [[StringUtils.capitalizeFirstChar(request.params.name)]])
+    pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE role_name = $1', [[StringUtils.capitalizeFirstChar(request.params.name)]])
         .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
@@ -19,28 +19,40 @@ exports.getUserById = (request, response) => {
         return;
     }
 
-    pool.query('SELECT "AutoDetailing"."Users".*, role_name FROM "AutoDetailing"."Users" JOIN "AutoDetailing"."UserRole" ON "AutoDetailing"."Users".user_id  = "AutoDetailing"."Users".user_id JOIN "AutoDetailing"."Role" ON "AutoDetailing"."UserRole".role_id = "AutoDetailing"."Role".role_id WHERE "AutoDetailing"."Users".user_id = $1', [request.params.id])
+    pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_id = $1', [request.params.id])
         .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
 exports.getUserByUsername = (request, response) => {
-    pool.query('SELECT "AutoDetailing"."Users".*, role_name FROM "AutoDetailing"."Users" JOIN "AutoDetailing"."UserRole" ON "AutoDetailing"."Users".user_id  = "AutoDetailing"."Users".user_id JOIN "AutoDetailing"."Role" ON "AutoDetailing"."UserRole".role_id = "AutoDetailing"."Role".role_id WHERE "AutoDetailing"."Users".user_username = $1',
+    pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_username = $1',
         [request.params.username])
         .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
 exports.getUserByFullname = (request, response) => {
-    pool.query('SELECT "AutoDetailing"."Users".*, role_name FROM "AutoDetailing"."Users" JOIN "AutoDetailing"."UserRole" ON "AutoDetailing"."Users".user_id  = "AutoDetailing"."Users".user_id JOIN "AutoDetailing"."Role" ON "AutoDetailing"."UserRole".role_id = "AutoDetailing"."Role".role_id WHERE "AutoDetailing"."Users".user_fullname = $1',
+    pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_fullname = $1',
         [request.params.fullname])
         .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
 exports.getUserByPhone = (request, response) => {
-    pool.query('SELECT "AutoDetailing"."Users".*, role_name FROM "AutoDetailing"."Users" JOIN "AutoDetailing"."UserRole" ON "AutoDetailing"."Users".user_id  = "AutoDetailing"."Users".user_id JOIN "AutoDetailing"."Role" ON "AutoDetailing"."UserRole".role_id = "AutoDetailing"."Role".role_id WHERE "AutoDetailing"."Users".user_phone = $1',
+    pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_phone = $1',
         [request.params.phone])
+        .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
+        .catch((err) => response.status(500).json({ status: "failed", reason: err }));
+};
+
+exports.getUserRoles = (request, response) => {
+    if (!request?.params?.id || isNaN(request?.params?.id) || request?.params?.id < 0) {
+        response.status(404).json({ status: "failed", reason: "user_id is invalid" });
+        return;
+    }
+
+    pool.query('SELECT role_name FROM "AutoDetailing"."UserRole" JOIN "AutoDetailing"."Role" ON "AutoDetailing"."UserRole".role_id = "AutoDetailing"."Role".role_id WHERE user_id = $1',
+        [request.params.id])
         .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };

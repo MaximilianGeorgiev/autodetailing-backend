@@ -12,6 +12,7 @@ router.get('/username/:username', UserController.getUserByUsername);
 router.get('/fullname/:fullname', UserController.getUserByFullname);
 router.get('/phone/:phone', UserController.getUserByPhone);
 router.get('/role/:name', UserController.getUsersByRoleName);
+router.get('/roles/:id', UserController.getUserRoles);
 
 router.get('/delete/:id', UserController.deleteUser); 
 

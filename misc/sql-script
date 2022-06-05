@@ -23,13 +23,14 @@ CREATE TABLE "AutoDetailing"."UserRole"
 
 CREATE TABLE "AutoDetailing"."Service"(
   service_id serial NOT NULL,
+  service_title varchar NOT NULL,
   service_description text NOT NULL,
   service_price numeric NOT NULL,
   CONSTRAINT "Service_pkey" PRIMARY KEY(service_id)
 );
 
 CREATE TABLE "AutoDetailing"."EntityPicture"
-  (service_id integer, product_id integer, picture_path varchar NOT NULL);
+  (service_id integer, product_id integer, blog_id integer, picture_path varchar NOT NULL);
 
 CREATE TABLE "AutoDetailing"."VehicleType"(
 vt_id serial NOT NULL, vt_type varchar NOT NULL,
@@ -49,6 +50,7 @@ CREATE TABLE "AutoDetailing"."BlogPost"(
 
 CREATE TABLE "AutoDetailing"."Product"(
   product_id serial NOT NULL,
+  product_title varchar NOT NULL,
   product_description varchar NOT NULL,
   product_price numeric NOT NULL,
   category_id integer NOT NULL,
@@ -106,6 +108,10 @@ ALTER TABLE "AutoDetailing"."UserRole"
 ALTER TABLE "AutoDetailing"."EntityPicture"
   ADD CONSTRAINT "EntityPicture_service_id_fkey"
     FOREIGN KEY (service_id) REFERENCES "AutoDetailing"."Service" (service_id);
+
+ALTER TABLE "AutoDetailing"."EntityPicture"
+  ADD CONSTRAINT "EntityPicture_blog_id_fkey"
+    FOREIGN KEY (blog_id) REFERENCES "AutoDetailing"."BlogPost" (blog_id);
 
 ALTER TABLE "AutoDetailing"."ServiceVehicleType"
   ADD CONSTRAINT "ServiceVehicleType_service_id_fkey"
