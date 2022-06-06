@@ -18,7 +18,7 @@ exports.getPromotionById = (request, response) => {
 };
 
 exports.getPromotionsForServices = (request, response) => {
-    pool.query('SELECT * FROM "AutoDetailing"."Promotion" WHERE service_id IS NOT NULL OR service_id != ""')
+    pool.query('SELECT * FROM "AutoDetailing"."Promotion" WHERE service_id IS NOT NULL')
         .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
@@ -35,7 +35,7 @@ exports.getPromotionByServiceId = (request, response) => {
 };
 
 exports.getPromotionsForProducts = (request, response) => {
-    pool.query('SELECT * FROM "AutoDetailing"."Promotion" WHERE product_id IS NOT NULL OR product_id != ""')
+    pool.query('SELECT * FROM "AutoDetailing"."Promotion" WHERE product_id IS NOT NULL')
         .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
