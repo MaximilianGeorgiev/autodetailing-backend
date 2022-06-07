@@ -1,15 +1,44 @@
 const pool = require("../database.js");
 const StringUtils = require("../utils/string.js");
+const bcrypt = require('bcrypt');
 
 exports.getAllUsers = (request, response) => {
     pool.query('SELECT * FROM "AutoDetailing"."Users"')
-        .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
+        .then((res) => {
+            let payload = [];
+
+            // omit password in response
+            for (let i = 0; i < res.rows.length; i++) {
+                let row = {};
+                for (const [key, value] of Object.entries(res.rows[i])) {
+                    if (key !== "user_password") row[key] = value;
+                }
+
+                payload.push(row);
+            }
+
+            response.status(200).json({ status: "success", payload: payload });
+        })
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
 exports.getUsersByRoleName = (request, response) => {
-    pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE role_name = $1', [[StringUtils.capitalizeFirstChar(request.params.name)]])
-        .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
+    pool.query('SELECT "AutoDetailing"."Users".* FROM "AutoDetailing"."UserRole" JOIN "AutoDetailing"."Role" ON "AutoDetailing"."UserRole".role_id = "AutoDetailing"."Role".role_id JOIN "AutoDetailing"."Users" ON "AutoDetailing"."UserRole".user_id = "AutoDetailing"."Users".user_id WHERE "AutoDetailing"."Role".role_name = $1', [StringUtils.capitalizeFirstChar(request.params.name)])
+        .then((res) => {
+            let payload = [];
+
+            // omit password in response
+            for (let i = 0; i < res.rows.length; i++) {
+                let row = {};
+                for (const [key, value] of Object.entries(res.rows[i])) {
+                    if (key !== "user_password") row[key] = value;
+                }
+
+                payload.push(row);
+            }
+
+            response.status(200).json({ status: "success", payload: payload })
+        })
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
@@ -20,28 +49,84 @@ exports.getUserById = (request, response) => {
     }
 
     pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_id = $1', [request.params.id])
-        .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
+        .then((res) => {
+            let payload = [];
+
+            // omit password in response
+            for (let i = 0; i < res.rows.length; i++) {
+                let row = {};
+                for (const [key, value] of Object.entries(res.rows[i])) {
+                    if (key !== "user_password") row[key] = value;
+                }
+
+                payload.push(row);
+            }
+
+            response.status(200).json({ status: "success", payload: payload })
+        })
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
 exports.getUserByUsername = (request, response) => {
     pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_username = $1',
         [request.params.username])
-        .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
+        .then((res) => {
+            let payload = [];
+
+            // omit password in response
+            for (let i = 0; i < res.rows.length; i++) {
+                let row = {};
+                for (const [key, value] of Object.entries(res.rows[i])) {
+                    if (key !== "user_password") row[key] = value;
+                }
+
+                payload.push(row);
+            }
+
+            response.status(200).json({ status: "success", payload: payload })
+        })
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
 exports.getUserByFullname = (request, response) => {
     pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_fullname = $1',
         [request.params.fullname])
-        .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
+        .then((res) => {
+            let payload = [];
+
+            // omit password in response
+            for (let i = 0; i < res.rows.length; i++) {
+                let row = {};
+                for (const [key, value] of Object.entries(res.rows[i])) {
+                    if (key !== "user_password") row[key] = value;
+                }
+
+                payload.push(row);
+            }
+
+            response.status(200).json({ status: "success", payload: payload })
+        })
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
 exports.getUserByPhone = (request, response) => {
     pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_phone = $1',
         [request.params.phone])
-        .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
+        .then((res) => {
+            let payload = [];
+
+            // omit password in response
+            for (let i = 0; i < res.rows.length; i++) {
+                let row = {};
+                for (const [key, value] of Object.entries(res.rows[i])) {
+                    if (key !== "user_password") row[key] = value;
+                }
+
+                payload.push(row);
+            }
+
+            response.status(200).json({ status: "success", payload: payload })
+        })
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
@@ -57,7 +142,7 @@ exports.getUserRoles = (request, response) => {
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
-exports.createUser = (request, response) => {
+exports.createUser = async (request, response) => {
     if (!request?.body) {
         response.status(400).json({ status: "failed", reason: "missing user creation parameters" });
         return;
@@ -83,19 +168,40 @@ exports.createUser = (request, response) => {
         return;
     }
 
-    if (!request?.body?.role) {
-        response.status(400).json({ status: "failed", reason: "role is invalid" });
-        return;
-    }
-
     let address = request.body.address ? request.body.address : "";
     let phone = request.body.phone ? request.body.phone : "";
+    let hashedPassword = await bcrypt.hash(request.body.password, 10);
+
+    let userFound = false;
+
+    await pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_username = $1 OR user_email = $2', [request.body.username, request.body.email])
+        .then((res) => {
+            if (res.rows.length != 0) {
+                response.status(400).json({ status: "failed", reason: "user with provided credentials already exists" });
+                userFound = true;
+            }
+        });
+
+    if (userFound) return;
 
     pool.query('INSERT INTO "AutoDetailing"."Users" (user_username, user_password, user_email, user_fullname, user_phone, user_address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-        [request.body.username, request.body.password,
+        [request.body.username, hashedPassword,
         request.body.email, request.body.fullname,
             address, phone])
-        .then((res) => response.status(200).json({ status: "success", "user": res.rows[0] }))
+        .then((res) => {
+            let payload = [];
+
+            // omit password in response
+            for (let i = 0; i < res.rows.length; i++) {
+                let row = {};
+                for (const [key, value] of Object.entries(res.rows[i])) {
+                    if (key !== "user_password") row[key] = value;
+                }
+
+                payload.push(row);
+            }
+            response.status(200).json({ status: "success", "user": payload })
+        })
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
