@@ -20,5 +20,6 @@ router.put('/:id', UserController.updateUser);
 
 router.post('/role/add', UserController.addRole);
 router.post('/role/remove', UserController.removeRole);
+router.post('/login', UserController.login);
 
 module.exports = router;

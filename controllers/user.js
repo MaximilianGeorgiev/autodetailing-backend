@@ -1,6 +1,9 @@
 const pool = require("../database.js");
 const StringUtils = require("../utils/string.js");
 const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+
+const AuthUtils = require("../utils/auth.js");
 
 exports.getAllUsers = (request, response) => {
     pool.query('SELECT * FROM "AutoDetailing"."Users"')
@@ -278,5 +281,50 @@ exports.removeRole = (request, response) => {
     pool.query('DELETE FROM "AutoDetailing"."UserRole" WHERE user_id = $1 AND role_id = $2', [request.body.user_id, request.body.role_id])
         .then((res) => response.status(200).json({ status: "success" }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err.detail }));
+};
+
+exports.login = async (request, response) => {
+    if (!request.body) {
+        response.status(400).json({ status: "failed", reason: "missing payload for login" });
+        return;
+    }
+
+    if (!request.body.username) {
+        response.status(400).json({ status: "failed", reason: "user_username is invalid" });
+        return;
+    }
+
+    if (!request.body.password) {
+        response.status(400).json({ status: "failed", reason: "user_password is invalid" });
+        return;
+    }
+
+    const result = await pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_username = $1', [request.body.username])
+        .then((res) => (res.rows))
+        .catch((err) => response.status(500).json({ status: "failed" }));
+
+    if (result.length === 0) {
+        response.status(400).json({ status: "failed", reason: "user not found" });
+        return;
+    }
+
+    const passwordMatches = await bcrypt.compare(request.body.password, result[0].user_password);
+
+    if (!passwordMatches) {
+        response.status(401).json({ status: "failed", reason: "provided password is incorrect" });
+        return;
+    }
+
+    const accessToken = AuthUtils.generateAccessToken({ user: request.body.username });
+    const refreshToken = AuthUtils.generateRefreshToken({ user: request.body.username });
+
+    let user = [];
+
+    // omit password in response
+        for (const [key, value] of Object.entries(result)) {
+            if (key !== "user_password") user[key] = value;
+        }
+    
+    response.status(200).json({ user: user, accessToken: accessToken, refreshToken: refreshToken });
 };
 
