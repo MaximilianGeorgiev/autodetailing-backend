@@ -7,16 +7,16 @@ router.route('/')
 .get(BlogController.getAllBlogs)
 .post(BlogController.createBlog);
 
-router.get('/id/:id', ServiceController.getBlogById);
-router.get('/title/:title', ServiceController.getBlogByTitle);
-router.get('/author/:id', ServiceController.getBlogByAuthorId);
-router.get('/delete/:id', ServiceController.deleteBlog); 
+router.get('/id/:id', BlogController.getBlogById);
+router.get('/title/:title', BlogController.getBlogByTitle);
+router.get('/author/:id', BlogController.getBlogByAuthorId);
+router.get('/delete/:id', BlogController.deleteBlog); 
 
-router.get('/pictures/:id', ServiceController.getBlogPictures);
+router.get('/pictures/:id', BlogController.getBlogPictures);
 
-router.post('/picture/add', ServiceController.addPicture);
-router.post('/picture/remove', ServiceController.removePicture);
+router.post('/picture/add', BlogController.addPicture);
+router.post('/picture/remove', BlogController.removePicture);
 
-router.put('/:id', ServiceController.updateBlog);
+router.put('/:id', BlogController.updateBlog);
 
 module.exports = router;

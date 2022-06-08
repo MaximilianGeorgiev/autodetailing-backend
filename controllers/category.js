@@ -34,7 +34,7 @@ exports.createCategory = (request, response) => {
     }
 
     pool.query('INSERT INTO "AutoDetailing"."Category" (category_name) VALUES ($1)', [request.body.name])
-        .then((res) => response.status(200).json({ status: "success" }))
+        .then((res) => response.status(200).json({ status: "success", category: res.rows[0] }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
