@@ -67,7 +67,7 @@ exports.createReservation = (request, response) => {
 
     pool.query('INSERT INTO "AutoDetailing"."Reservation" (reservation_datetime, reservation_totalprice, reservation_ispaid, user_id) VALUES ($1, $2, $3, $4) RETURNING *',
         [dateTime, totalPrice, request.body.ispaid, request.body.user_id])
-        .then((res) => response.status(200).json({ status: "success", "reservation": res.rows[0] }))
+        .then((res) => response.status(200).json({ status: "success", reservation: res.rows[0] }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 

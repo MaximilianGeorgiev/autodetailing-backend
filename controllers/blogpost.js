@@ -77,7 +77,7 @@ exports.createBlog = (request, response) => {
 
     pool.query('INSERT INTO "AutoDetailing"."BlogPost" (blog_title, blog_text, author_id) VALUES ($1, $2, $3) RETURNING *',
         [request.body.title, request.body.text, request.body.author_id])
-        .then((res) => response.status(200).json({ status: "success", "blog": res.rows[0] }))
+        .then((res) => response.status(200).json({ status: "success", blog: res.rows[0] }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err.detail }));
 
 };

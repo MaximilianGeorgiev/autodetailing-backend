@@ -72,7 +72,7 @@ exports.createService = (request, response) => {
 
     pool.query('INSERT INTO "AutoDetailing"."Service" (service_title, service_description, service_price) VALUES ($1, $2, $3) RETURNING *',
         [request.body.title, request.body.description, request.body.price])
-        .then((res) => response.status(200).json({ status: "success", "service": res.rows[0] }))
+        .then((res) => response.status(200).json({ status: "success", service: res.rows[0] }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err.detail }));
 
 };

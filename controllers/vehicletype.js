@@ -34,7 +34,7 @@ exports.createVehicleType = (request, response) => {
     }
 
     pool.query('INSERT INTO "AutoDetailing"."VehicleType" (vt_type) VALUES ($1)', [request.body.type])
-        .then((res) => response.status(200).json({ status: "success" }))
+        .then((res) => response.status(200).json({ status: "success", vehicleType: res.rows[0]}))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 

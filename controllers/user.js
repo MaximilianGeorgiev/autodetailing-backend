@@ -203,7 +203,7 @@ exports.createUser = async (request, response) => {
 
                 payload.push(row);
             }
-            response.status(200).json({ status: "success", "user": payload })
+            response.status(200).json({ status: "success", user: payload })
         })
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };

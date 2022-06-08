@@ -50,7 +50,7 @@ exports.updateRole = (request, response) => {
     }
 
     pool.query('UPDATE "AutoDetailing"."Role" set role_name = $1 WHERE role_id = $2', [request.body.name, request.params.id])
-        .then((res) => response.status(200).json({ status: "success" }))
+        .then((res) => response.status(200).json({ status: "success", role: res.rows[0]}))
         .catch((err) => response.status(500).json({ status: "failed" }));
 };
 

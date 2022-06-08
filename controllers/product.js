@@ -53,7 +53,7 @@ exports.createProduct = (request, response) => {
 
     pool.query('INSERT INTO "AutoDetailing"."Product" (product_title, product_description, product_price, category_id) VALUES ($1, $2, $3, $4) RETURNING *',
         [request.body.title, request.body.description, request.body.price, request.body.category_id])
-        .then((res) => response.status(200).json({ status: "success", "product": res.rows[0] }))
+        .then((res) => response.status(200).json({ status: "success", product: res.rows[0] }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err.detail }));
 };
 

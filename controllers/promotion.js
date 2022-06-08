@@ -88,7 +88,7 @@ exports.createPromotion = (request, response) => {
     console.log(request.body.product_id);
     pool.query('INSERT INTO "AutoDetailing"."Promotion" (promotion_from, promotion_to, promotion_new_price, product_id, service_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
         [fromDate, toDate, request.body.price, product_id, service_id])
-        .then((res) => response.status(200).json({ status: "success", "promotion": res.rows[0] }))
+        .then((res) => response.status(200).json({ status: "success", promotion: res.rows[0] }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
