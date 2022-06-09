@@ -3,10 +3,12 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3030;
 const AuthUtils = require("./utils/auth.js");
+const cors = require('cors');
 
 require('dotenv').config();
 
 app.use(bodyParser.json());
+app.use(cors());
 
 app.use(
     bodyParser.urlencoded({
