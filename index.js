@@ -25,16 +25,17 @@ const reservationRoutes = require("./routes/reservation.js");
 const serviceRoutes = require("./routes/service.js");
 const userRoutes = require("./routes/user.js");
 
+// some APIs require auth for all CRUD operations, some are configured in their respective route files
 app.use('/roles', AuthUtils.validateToken, roleRoutes);
 app.use('/vehicle-type', AuthUtils.validateToken, vehicleTypeRoutes);
-app.use('/blog', AuthUtils.validateToken, blogPostRoutes);
+app.use('/blog', blogPostRoutes);
 app.use('/category', AuthUtils.validateToken, categoryRoutes);
 app.use('/order', AuthUtils.validateToken, orderRoutes);
-app.use('/product', AuthUtils.validateToken, productRoutes);
-app.use('/promotion', AuthUtils.validateToken, promotionRoutes);
+app.use('/product', productRoutes);
+app.use('/promotion', promotionRoutes);
 app.use('/reservation', AuthUtils.validateToken, reservationRoutes);
-app.use('/service', AuthUtils.validateToken, serviceRoutes);
-app.use('/user', AuthUtils.validateToken, userRoutes);
+app.use('/service', serviceRoutes);
+app.use('/user', userRoutes);
 
 
 app.get('/', (request, response) => {
