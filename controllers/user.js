@@ -289,8 +289,8 @@ exports.login = async (request, response) => {
         return;
     }
 
-    if (!request.body.username) {
-        response.status(400).json({ status: "failed", reason: "user_username is invalid" });
+    if (!request.body.email) {
+        response.status(400).json({ status: "failed", reason: "user_email is invalid" });
         return;
     }
 
@@ -299,7 +299,7 @@ exports.login = async (request, response) => {
         return;
     }
 
-    const result = await pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_username = $1', [request.body.username])
+    const result = await pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_email = $1', [request.body.email])
         .then((res) => (res.rows))
         .catch((err) => response.status(500).json({ status: "failed" }));
 
