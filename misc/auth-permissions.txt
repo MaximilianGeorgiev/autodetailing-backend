@@ -1,0 +1,15 @@
+User - C if not registered, RUD if registered
+BlogPost - R if not registered, C UD if registered
+Category - CRUD if registered
+Product - R if not registered, C UD if registered
+Service - R if not registered, C UD if registered 
+VT - CRUD if registered
+EntityPicture - R if not registered, C UD if registered
+Promotion - R if not registered, C UD if registered
+Order - CRUD if registered
+OrderProduct - CRUD if registered
+Reservation - CRUD if registered
+ReservationService - CRUD if registered
+UserRole - CRUD if registered
+Role - CRUD if registered
+ServiceVehicleType - R if not registered, C UD if registered
