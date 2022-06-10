@@ -22,4 +22,6 @@ router.post('/role/add', AuthUtils.validateToken, UserController.addRole);
 router.post('/role/remove', AuthUtils.validateToken, UserController.removeRole);
 router.post('/login', UserController.login);
 
+router.get('/check/:email/:username', UserController.userExists);
+
 module.exports = router;
