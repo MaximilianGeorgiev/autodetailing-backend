@@ -325,6 +325,6 @@ exports.login = async (request, response) => {
             if (key !== "user_password") user[key] = value;
         }
     
-    response.status(200).json({ user: user, accessToken: accessToken, refreshToken: refreshToken });
+    response.status(200).json({ status: "success", user: user, accessToken: accessToken, refreshToken: refreshToken });
 };
 
