@@ -16,7 +16,7 @@ exports.userExists = (request, response) => {
         return;
     }
 
-    pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_username = $1 AND user_email = $2', 
+    pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_username = $1 OR user_email = $2', 
     [request.params.username, request.params.email]).then((res) => {
         if (res.rows.length === 0) response.status(200).json({ status: "success", result: "user not found" });
         else response.status(200).json({ status: "success", result: "user exists"});
