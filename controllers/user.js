@@ -5,6 +5,24 @@ const jwt = require("jsonwebtoken");
 
 const AuthUtils = require("../utils/auth.js");
 
+exports.userExists = (request, response) => {
+    if (!request.params.username) {
+        response.status(404).json({ status: "failed", reason: "user_username is invalid" });
+        return;
+    }
+
+    if (!request.params.email) {
+        response.status(404).json({ status: "failed", reason: "user_username is invalid" });
+        return;
+    }
+
+    pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_username = $1 AND user_email = $2', 
+    [request.params.username, request.params.email]).then((res) => {
+        if (res.rows.length === 0) response.status(200).json({ status: "success", result: "user not found" });
+        else response.status(200).json({ status: "success", result: "user exists"});
+    });
+};
+
 exports.getAllUsers = (request, response) => {
     pool.query('SELECT * FROM "AutoDetailing"."Users"')
         .then((res) => {
