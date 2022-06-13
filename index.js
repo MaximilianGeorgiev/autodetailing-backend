@@ -28,7 +28,7 @@ const serviceRoutes = require("./routes/service.js");
 const userRoutes = require("./routes/user.js");
 
 // some APIs require auth for all CRUD operations, some are configured in their respective route files
-app.use('/roles', AuthUtils.validateToken, roleRoutes);
+app.use('/roles', roleRoutes);
 app.use('/vehicle-type', AuthUtils.validateToken, vehicleTypeRoutes);
 app.use('/blog', blogPostRoutes);
 app.use('/category', AuthUtils.validateToken, categoryRoutes);
