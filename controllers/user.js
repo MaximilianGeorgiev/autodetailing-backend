@@ -12,7 +12,7 @@ exports.userExists = (request, response) => {
     }
 
     if (!request.params.email) {
-        response.status(404).json({ status: "failed", reason: "user_username is invalid" });
+        response.status(404).json({ status: "failed", reason: "user_email is invalid" });
         return;
     }
 

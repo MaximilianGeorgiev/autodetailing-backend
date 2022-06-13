@@ -26,6 +26,7 @@ CREATE TABLE "AutoDetailing"."Service"(
   service_title varchar NOT NULL,
   service_description text NOT NULL,
   service_price numeric NOT NULL,
+  category_id integer NOT NULL,
   CONSTRAINT "Service_pkey" PRIMARY KEY(service_id)
 );
 
@@ -164,5 +165,10 @@ ALTER TABLE "AutoDetailing"."OrderProduct"
 
 ALTER TABLE "AutoDetailing"."Product"
   ADD CONSTRAINT "Product_category_id_fkey"
+    FOREIGN KEY (category_id) REFERENCES "AutoDetailing"."Category" (category_id)
+  ;
+
+ALTER TABLE "AutoDetailing"."Service"
+  ADD CONSTRAINT "Service_category_id_fkey"
     FOREIGN KEY (category_id) REFERENCES "AutoDetailing"."Category" (category_id)
   ;
