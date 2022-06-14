@@ -88,3 +88,57 @@ exports.updateProduct = (request, response) => {
             .catch((err) => response.status(500).json({ status: "failed" }));
     }
 };
+
+exports.addPicture = (request, response) => {
+    if (!request?.body) {
+        response.status(400).json({ status: "failed", reason: "missing payload for picture adding" });
+        return;
+    }
+
+    if (!request?.body?.product_id || isNaN(request?.body?.product_id) || request?.body?.product_id < 0) {
+        response.status(404).json({ status: "failed", reason: "product_id is invalid" });
+        return;
+    }
+
+    if (!request?.body?.picture_path || request?.body?.picture_path === "") {
+        response.status(404).json({ status: "failed", reason: "picture_path is invalid" });
+        return;
+    }
+
+    pool.query('INSERT INTO "AutoDetailing"."EntityPicture" (product_id, picture_path) VALUES ($1, $2)', [request.body.product_id, request.body.picture_path])
+        .then((res) => response.status(200).json({ status: "success" }))
+        .catch((err) => response.status(500).json({ status: "failed", reason: err.detail }));
+};
+
+exports.removePicture = (request, response) => {
+    if (!request?.body) {
+        response.status(400).json({ status: "failed", reason: "missing payload for picture adding" });
+        return;
+    }
+
+    if (!request?.body?.product_id || isNaN(request?.body?.product_id) || request?.body?.product_id < 0) {
+        response.status(404).json({ status: "failed", reason: "product_id is invalid" });
+        return;
+    }
+
+    if (!request?.body?.picture_path || request?.body?.picture_path === "") {
+        response.status(404).json({ status: "failed", reason: "picture_path is invalid" });
+        return;
+    }
+
+    pool.query('DELETE FROM "AutoDetailing"."EntityPicture" WHERE product_id = $1 AND picture_path = $2', [request.body.product_id, request.body.picture_path])
+        .then((res) => response.status(200).json({ status: "success" }))
+        .catch((err) => response.status(500).json({ status: "failed", reason: err.detail }));
+};
+
+exports.getProductPictures = (request, response) => {
+    if (!request?.params?.id || isNaN(request?.params?.id) || request?.params?.id < 0) {
+        response.status(404).json({ status: "failed", reason: "picture_id is invalid" });
+        return;
+    }
+
+    pool.query('SELECT picture_path FROM "AutoDetailing"."EntityPicture" WHERE product_id = $1',
+        [request.params.id])
+        .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
+        .catch((err) => response.status(500).json({ status: "failed", reason: err }));
+};

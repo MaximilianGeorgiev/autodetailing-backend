@@ -9,7 +9,12 @@ router.post('/', AuthUtils.validateToken, ProductController.createProduct);
 
 router.get('/id/:id', ProductController.getProductById);
 router.get('/title/:title', ProductController.getProductByTitle);
-router.get('/delete/:id', AuthUtils.validateToken, ProductController.deleteProduct); 
+router.get('/delete/:id', AuthUtils.validateToken, ProductController.deleteProduct);
+
+router.get('/pictures/:id', ProductController.getProductPictures);
+
+router.post('/picture/add', AuthUtils.validateToken, ProductController.addPicture);
+router.post('/picture/remove', AuthUtils.validateToken, ProductController.removePicture);
 
 router.put('/:id', AuthUtils.validateToken, ProductController.updateProduct);
 
