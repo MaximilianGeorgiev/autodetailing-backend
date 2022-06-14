@@ -26,6 +26,7 @@ const promotionRoutes = require("./routes/promotion.js");
 const reservationRoutes = require("./routes/reservation.js");
 const serviceRoutes = require("./routes/service.js");
 const userRoutes = require("./routes/user.js");
+const pictureRoutes = require("./routes/picture.js");
 
 // some APIs require auth for all CRUD operations, some are configured in their respective route files
 app.use('/roles', roleRoutes);
@@ -38,6 +39,7 @@ app.use('/promotion', promotionRoutes);
 app.use('/reservation', AuthUtils.validateToken, reservationRoutes);
 app.use('/service', serviceRoutes);
 app.use('/user', userRoutes);
+app.use('/picture', pictureRoutes);
 
 
 app.get('/', (request, response) => {
