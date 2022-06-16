@@ -12,13 +12,13 @@ exports.getProductById = (request, response) => {
         return;
     }
 
-    pool.query('SELECT "AutoDetailing"."Product".*, category_name FROM "AutoDetailing"."Product" JOIN "AutoDetailing"."Category" ON "AutoDetailing"."Product".category_id = "AutoDetailing"."Product".category_id WHERE "AutoDetailing"."Product".category_id = "AutoDetailing"."Category".category_id AND "AutoDetailing"."Product".product_id = $1', [request.params.id])
+    pool.query('SELECT * FROM "AutoDetailing"."Product" JOIN "AutoDetailing"."Category" ON "AutoDetailing"."Product".category_id = "AutoDetailing"."Product".category_id WHERE "AutoDetailing"."Product".category_id = "AutoDetailing"."Category".category_id AND "AutoDetailing"."Product".product_id = $1', [request.params.id])
         .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
 exports.getProductByTitle = (request, response) => {
-    pool.query('SELECT "AutoDetailing"."Product".*, category_name FROM "AutoDetailing"."Product" JOIN "AutoDetailing"."Category" ON "AutoDetailing"."Product".category_id = "AutoDetailing"."Product".category_id WHERE "AutoDetailing"."Product".category_id = "AutoDetailing"."Category".category_id AND "AutoDetailing"."Product".product_title = $1',
+    pool.query('SELECT * FROM "AutoDetailing"."Product" JOIN "AutoDetailing"."Category" ON "AutoDetailing"."Product".category_id = "AutoDetailing"."Product".category_id WHERE "AutoDetailing"."Product".category_id = "AutoDetailing"."Category".category_id AND "AutoDetailing"."Product".product_title = $1',
         [request.params.title])
         .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
