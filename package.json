@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js && http-server ./"
+    "start": "nodemon index.js && http-server ./",
+    "start-httpserver" : "./node_modules/.bin/http-server -a localhost -p 8080 -c-1"
   },
   "keywords": [],
   "author": "",

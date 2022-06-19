@@ -1,4 +1,5 @@
-const PICTURE_HOST = "http://192.168.1.8:8080/";
+//const PICTURE_HOST = "http://192.168.1.8:8080/";
+const PICTURE_HOST = "http://localhost:8080/";
 
 exports.addPicture = (request, response) => {
     let paths = [];
