@@ -36,7 +36,7 @@ app.use('/category', AuthUtils.validateToken, categoryRoutes);
 app.use('/order', AuthUtils.validateToken, orderRoutes);
 app.use('/product', productRoutes);
 app.use('/promotion', promotionRoutes);
-app.use('/reservation', AuthUtils.validateToken, reservationRoutes);
+app.use('/reservation', reservationRoutes);
 app.use('/service', serviceRoutes);
 app.use('/user', userRoutes);
 app.use('/picture', pictureRoutes);

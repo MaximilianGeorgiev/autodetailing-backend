@@ -52,11 +52,6 @@ exports.createReservation = (request, response) => {
         return;
     }
 
-    if (!request?.body?.ispaid) {
-        response.status(400).json({ status: "failed", reason: "reservation_ispaid is invalid" });
-        return;
-    }
-
     if (!request?.body?.user_id) {
         response.status(400).json({ status: "failed", reason: "user_id is invalid" });
         return;

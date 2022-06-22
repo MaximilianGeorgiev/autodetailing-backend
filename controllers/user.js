@@ -192,23 +192,14 @@ exports.createUser = async (request, response) => {
     let address = request.body.address ? request.body.address : "";
     let phone = request.body.phone ? request.body.phone : "";
     let hashedPassword = await bcrypt.hash(request.body.password, 10);
+    let isGuest = request.body.isGuest ? request.body.isGuest : false;
 
     let userFound = false;
 
-    await pool.query('SELECT * FROM "AutoDetailing"."Users" WHERE user_username = $1 OR user_email = $2', [request.body.username, request.body.email])
-        .then((res) => {
-            if (res.rows.length != 0) {
-                response.status(400).json({ status: "failed", reason: "user with provided credentials already exists" });
-                userFound = true;
-            }
-        });
-
-    if (userFound) return;
-
-    pool.query('INSERT INTO "AutoDetailing"."Users" (user_username, user_password, user_email, user_fullname, user_phone, user_address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+    pool.query('INSERT INTO "AutoDetailing"."Users" (user_username, user_password, user_email, user_fullname, user_phone, user_address, is_guest) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
         [request.body.username, hashedPassword,
         request.body.email, request.body.fullname,
-            phone, address])
+            phone, address, isGuest])
         .then((res) => {
             let payload = [];
 
@@ -323,6 +314,11 @@ exports.login = async (request, response) => {
 
     if (result.length === 0) {
         response.status(400).json({ status: "failed", reason: "user not found" });
+        return;
+    }
+
+    if (result?.is_guest){
+        response.status(500).json({ status: "failed", reason: "guest users cannot login" });
         return;
     }
 
