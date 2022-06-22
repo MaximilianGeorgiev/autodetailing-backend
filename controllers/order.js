@@ -97,7 +97,7 @@ exports.createOrder = (request, response) => {
     const totalPrice = request?.body?.totalprice ? request.body.totalprice : 0;
     const address = request?.body?.address ? request.body.address : "";
 
-    pool.query('INSERT INTO "AutoDetailing"."Order" (order_totalprice, order_isdelivery, order_address, order_ispaid, customer_id) VALUES ($1, $2, $3, $4, $5)',
+    pool.query('INSERT INTO "AutoDetailing"."Order" (order_totalprice, order_isdelivery, order_address, order_ispaid, customer_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
         [totalPrice, request.body.isdelivery, address, request.body.ispaid, request.body.customer_id])
         .then((res) => response.status(200).json({ status: "success", order: res.rows[0]}))
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));

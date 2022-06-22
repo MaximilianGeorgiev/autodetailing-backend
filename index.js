@@ -33,7 +33,7 @@ app.use('/roles', roleRoutes);
 app.use('/vehicle-type', AuthUtils.validateToken, vehicleTypeRoutes);
 app.use('/blog', blogPostRoutes);
 app.use('/category', AuthUtils.validateToken, categoryRoutes);
-app.use('/order', AuthUtils.validateToken, orderRoutes);
+app.use('/order', orderRoutes);
 app.use('/product', productRoutes);
 app.use('/promotion', promotionRoutes);
 app.use('/reservation', reservationRoutes);
