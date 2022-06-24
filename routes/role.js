@@ -10,6 +10,7 @@ router.post('/', AuthUtils.validateToken, RoleController.createRole);
 router.get('/id/:id', RoleController.getRoleById);
 router.get('/name/:name', RoleController.getRoleByName);
 router.get('/delete/:id', AuthUtils.validateToken, RoleController.deleteRole); 
+router.get('/unassign/user/:id', AuthUtils.validateToken, RoleController.unassignUserRoles);
 
 router.put('/:id', AuthUtils.validateToken, RoleController.updateRole);
 

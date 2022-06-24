@@ -103,13 +103,51 @@ exports.createOrder = (request, response) => {
         .catch((err) => response.status(500).json({ status: "failed", reason: err }));
 };
 
-exports.deleteOrder = (request, response) => {
+exports.deleteOrder = async (request, response) => {
     if (!request?.params?.id || isNaN(request?.params?.id) || request?.params?.id < 0) {
         response.status(400).json({ status: "failed", reason: "order_id is invalid" });
         return;
     }
 
+    await pool.query(
+        'DELETE FROM "AutoDetailing"."OrderProduct" WHERE order_id = $1',
+        [request.params.id]
+      );
+
     pool.query('DELETE FROM "AutoDetailing"."Order" WHERE order_id = $1', [request.params.id])
+        .then((res) => response.status(200).json({ status: "success" }))
+        .catch((err) => response.status(500).json({ status: "failed" }));
+};
+
+exports.deleteOrdersWithProduct = (request, response) => {
+    if (!request?.params?.id || isNaN(request?.params?.id) || request?.params?.id < 0) {
+        response.status(400).json({ status: "failed", reason: "product_id is invalid" });
+        return;
+    }
+
+    pool.query('DELETE FROM "AutoDetailing"."OrderProduct" WHERE product_id = $1', [request.params.id])
+        .then((res) => response.status(200).json({ status: "success" }))
+        .catch((err) => response.status(500).json({ status: "failed" }));
+};
+
+exports.deleteOrdersForUser = async (request, response) => {
+    if (!request?.params?.id || isNaN(request?.params?.id) || request?.params?.id < 0) {
+        response.status(400).json({ status: "failed", reason: "user_id is invalid" });
+        return;
+    }
+
+    const orderIds = await pool.query(
+        'SELECT order_id FROM "AutoDetailing"."Order" WHERE customer_id = $1',
+        [request.params.id]
+      );
+    
+      for (let i = 0; i < orderIds.rows.length; i++)
+        await pool.query(
+          'DELETE FROM "AutoDetailing"."OrderProduct" WHERE order_id = $1',
+          [orderIds.rows[i].order_id]
+        );
+
+    pool.query('DELETE FROM "AutoDetailing"."Order" WHERE customer_id = $1', [request.params.id])
         .then((res) => response.status(200).json({ status: "success" }))
         .catch((err) => response.status(500).json({ status: "failed" }));
 };

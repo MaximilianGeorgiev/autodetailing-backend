@@ -15,6 +15,7 @@ router.get('/pictures/:id', ProductController.getProductPictures);
 
 router.post('/picture/add', AuthUtils.validateToken, ProductController.addPicture);
 router.post('/picture/remove', AuthUtils.validateToken, ProductController.removePicture);
+router.post('/picture/remove/all', AuthUtils.validateToken, ProductController.removeAllPicturesForProduct);
 
 router.put('/:id', AuthUtils.validateToken, ProductController.updateProduct);
 

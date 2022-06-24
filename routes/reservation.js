@@ -14,6 +14,8 @@ router.get('/date/:date', AuthUtils.validateToken, ReservationController.getRese
 router.get('/user/:id', ReservationController.getReservationsForCustomer);
 
 router.get('/delete/:id', AuthUtils.validateToken, ReservationController.deleteReservation); 
+router.get('/delete/service/:id', AuthUtils.validateToken, ReservationController.deleteReservationsWithService);
+router.get('/delete/user/:id', AuthUtils.validateToken, ReservationController.deleteReservationsForUser);
 
 router.put('/:id', AuthUtils.validateToken, ReservationController.updateReservation);
 

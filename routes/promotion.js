@@ -16,6 +16,8 @@ router.get('/product', PromotionController.getPromotionsForProducts);
 router.get('/product/:id', PromotionController.getPromotionByProductId);
 
 router.get('/delete/:id', AuthUtils.validateToken, PromotionController.deletePromotion);
+router.get('/delete/service/:id', AuthUtils.validateToken, PromotionController.deletePromotionsForService);
+router.get('/delete/product/:id', AuthUtils.validateToken, PromotionController.deletePromotionsForProduct);
 
 router.put('/:id', AuthUtils.validateToken, PromotionController.updatePromotion);
 

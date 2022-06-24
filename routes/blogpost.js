@@ -11,6 +11,7 @@ router.get('/id/:id', BlogController.getBlogById);
 router.get('/title/:title', BlogController.getBlogByTitle);
 router.get('/author/:id', AuthUtils.validateToken, BlogController.getBlogByAuthorId);
 router.get('/delete/:id', AuthUtils.validateToken, BlogController.deleteBlog); 
+router.get('/delete/user/:id', AuthUtils.validateToken, BlogController.deleteBlogsForUser);
 
 router.get('/pictures/:id', BlogController.getBlogPictures);
 

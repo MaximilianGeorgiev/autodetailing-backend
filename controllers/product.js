@@ -68,6 +68,22 @@ exports.deleteProduct = (request, response) => {
         .catch((err) => response.status(500).json({ status: "failed" }));
 };
 
+exports.removeAllPicturesForProduct = (request, response) => {
+    if (!request?.body) {
+        response.status(400).json({ status: "failed", reason: "missing payload for picture removing" });
+        return;
+    }
+
+    if (!request?.body?.product_id || isNaN(request?.body?.product_id) || request?.body?.product_id < 0) {
+        response.status(404).json({ status: "failed", reason: "product_id is invalid" });
+        return;
+    }
+
+    pool.query('DELETE FROM "AutoDetailing"."EntityPicture" WHERE product_id = $1', [request.body.product_id])
+        .then((res) => response.status(200).json({ status: "success" }))
+        .catch((err) => response.status(500).json({ status: "failed", reason: err.detail }));
+};
+
 exports.updateProduct = (request, response) => {
     if (!request?.params?.id || isNaN(request?.params?.id) || request?.params?.id < 0) {
         response.status(400).json({ status: "failed", reason: "product_id is invalid" });

@@ -157,6 +157,22 @@ exports.removePicture = (request, response) => {
         .catch((err) => response.status(500).json({ status: "failed", reason: err.detail }));
 };
 
+exports.removeAllPicturesForService = (request, response) => {
+    if (!request?.body) {
+        response.status(400).json({ status: "failed", reason: "missing payload for picture removing" });
+        return;
+    }
+
+    if (!request?.body?.service_id || isNaN(request?.body?.service_id) || request?.body?.service_id < 0) {
+        response.status(404).json({ status: "failed", reason: "service_id is invalid" });
+        return;
+    }
+
+    pool.query('DELETE FROM "AutoDetailing"."EntityPicture" WHERE service_id = $1', [request.body.service_id])
+        .then((res) => response.status(200).json({ status: "success" }))
+        .catch((err) => response.status(500).json({ status: "failed", reason: err.detail }));
+};
+
 exports.addVehicleType = (request, response) => {
     if (!request?.body) {
         response.status(400).json({ status: "failed", reason: "missing payload for vehicle type adding" });

@@ -16,6 +16,7 @@ router.get('/vehicle-types/:id', ServiceController.getServiceVehicleTypes);
 
 router.post('/picture/add', AuthUtils.validateToken, ServiceController.addPicture);
 router.post('/picture/remove', AuthUtils.validateToken, ServiceController.removePicture);
+router.post('/picture/remove/all', AuthUtils.validateToken, ServiceController.removeAllPicturesForService);
 
 router.post('/vehicle-type/add', AuthUtils.validateToken, ServiceController.addVehicleType);
 router.post('/vehicle-type/remove', AuthUtils.validateToken, ServiceController.removeVehicleType);

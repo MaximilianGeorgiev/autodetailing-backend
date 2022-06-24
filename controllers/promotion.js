@@ -103,6 +103,28 @@ exports.deletePromotion = (request, response) => {
         .catch((err) => response.status(500).json({ status: "failed" }));
 };
 
+exports.deletePromotionsForService = (request, response) => {
+    if (!request?.params?.id || isNaN(request?.params?.id) || request?.params?.id < 0) {
+        response.status(400).json({ status: "failed", reason: "service_id is invalid" });
+        return;
+    }
+
+    pool.query('DELETE FROM "AutoDetailing"."Promotion" WHERE service_id = $1', [request.params.id])
+        .then((res) => response.status(200).json({ status: "success" }))
+        .catch((err) => response.status(500).json({ status: "failed" }));
+};
+
+exports.deletePromotionsForProduct = (request, response) => {
+    if (!request?.params?.id || isNaN(request?.params?.id) || request?.params?.id < 0) {
+        response.status(400).json({ status: "failed", reason: "product_id is invalid" });
+        return;
+    }
+
+    pool.query('DELETE FROM "AutoDetailing"."Promotion" WHERE product_id = $1', [request.params.id])
+        .then((res) => response.status(200).json({ status: "success" }))
+        .catch((err) => response.status(500).json({ status: "failed" }));
+};
+
 exports.updatePromotion = (request, response) => {
     if (!request?.params?.id || isNaN(request?.params?.id) || request?.params?.id < 0) {
         response.status(400).json({ status: "failed", reason: "promotion_id is invalid" });
