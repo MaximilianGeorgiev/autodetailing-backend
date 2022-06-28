@@ -46,7 +46,7 @@ app.get('/', (request, response) => {
     response.json({ info: 'Node.js, Express, and Postgres API' })
 });
 
-app.post("/refreshToken", AuthUtils.validateToken, AuthUtils.refreshToken);
+app.post("/refreshToken", AuthUtils.refreshToken);
 app.post("/removeToken", AuthUtils.validateToken, AuthUtils.removeToken);
 
 app.listen(port, () => {

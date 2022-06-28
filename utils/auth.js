@@ -10,11 +10,11 @@ const jwt = require("jsonwebtoken");
 let refreshTokens = [];
 
 exports.generateAccessToken = (user) => {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" })
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "5m" })
 };
 
 exports.generateRefreshToken = (user) => {
-    const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "20m" });
+    const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "8m" });
     refreshTokens.push(refreshToken);
     return refreshToken;
 };
@@ -34,6 +34,8 @@ exports.refreshToken = (request, response) => {
         response.status(400).json({ status: "failed", reason: "username is invalid" });
         return;
     }
+
+    console.log(JSON.stringify(refreshTokens))
 
     if (!refreshTokens.includes(request.body.token)) {
         response.status(400).json({ status: "failed", reason: "invalid refresh token" });
