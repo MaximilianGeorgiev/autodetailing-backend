@@ -110,7 +110,7 @@ exports.deleteOrder = async (request, response) => {
     }
 
     await pool.query(
-        'DELETE FROM "AutoDetailing"."OrderProduct" WHERE order_id = $1',
+        'DELETE FROM "AutoDetailing"."OrderProduct" OP USING "AutoDetailing"."Order" O WHERE OP.order_id O.order_id and OP.order_id = $1',
         [request.params.id]
       );
 

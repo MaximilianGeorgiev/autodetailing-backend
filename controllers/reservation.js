@@ -139,7 +139,7 @@ exports.deleteReservation = async (request, response) => {
   }
 
   await pool.query(
-    'DELETE FROM "AutoDetailing"."ReservationService" WHERE reservaton_id = $1',
+    'DELETE FROM "AutoDetailing"."ReservationService" RS USING "AutoDetailing"."Reservation" R WHERE RS.reservation_id =  R.reservation_id AND RS.reservation_id = $1',
     [request.params.id]
   );
 

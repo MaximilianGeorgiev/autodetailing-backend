@@ -265,7 +265,7 @@ exports.createUser = async (request, response) => {
 
   pool
     .query(
-      'INSERT INTO "AutoDetailing"."Users" (user_username, user_password, user_email, user_fullname, user_phone, user_address, is_guest) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      'INSERT INTO "AutoDetailing"."Users" (user_username, user_password, user_email, user_fullname, user_phone, user_address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
       [
         request.body.username,
         hashedPassword,
@@ -273,7 +273,6 @@ exports.createUser = async (request, response) => {
         request.body.fullname,
         phone,
         address,
-        isGuest,
       ]
     )
     .then((res) => {
