@@ -10,11 +10,11 @@ const jwt = require("jsonwebtoken");
 let refreshTokens = [];
 
 exports.generateAccessToken = (user) => {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" })
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "90m" })
 };
 
 exports.generateRefreshToken = (user) => {
-    const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "20m" });
+    const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "95m" });
     refreshTokens.push(refreshToken);
     return refreshToken;
 };

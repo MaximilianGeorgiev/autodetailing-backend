@@ -1,6 +1,6 @@
 const pool = require("../database.js");
 
-const OrderService = require("../services/category")
+const OrderService = require("../services/order");
 
 exports.getAllOrders = (request, response) => {
     OrderService.getAllOrders(request, response);

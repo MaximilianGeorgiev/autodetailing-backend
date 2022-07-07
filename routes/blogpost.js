@@ -17,6 +17,7 @@ router.get('/pictures/:id', BlogController.getBlogPictures);
 
 router.post('/picture/add', AuthUtils.validateToken, BlogController.addPicture);
 router.post('/picture/remove', AuthUtils.validateToken, BlogController.removePicture);
+router.post('/picture/remove/all', AuthUtils.validateToken, BlogController.removeAllPicturesForBlog);
 
 router.put('/:id', AuthUtils.validateToken, BlogController.updateBlog);
 
