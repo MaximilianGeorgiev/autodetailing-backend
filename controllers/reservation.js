@@ -36,6 +36,17 @@ exports.getReservationById = (request, response) => {
     );
 };
 
+exports.getReservationServices = (request, response) => {
+  if (!request?.params?.id || isNaN(request?.params?.id) || request?.params?.id < 0) {
+      response.status(404).json({ status: "failed", reason: "reservation_id is invalid" });
+      return;
+  }
+
+  pool.query('SELECT * FROM "AutoDetailing"."ReservationService" WHERE reservation_id = $1', [request.params.id])
+      .then((res) => response.status(200).json({ status: "success", payload: res.rows }))
+      .catch((err) => response.status(500).json({ status: "failed", reason: err }));
+};
+
 exports.getReservationsOnDate = (request, response) => {
   if (
     !request?.params?.date ||

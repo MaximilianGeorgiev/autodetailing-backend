@@ -9,6 +9,7 @@ router.get('/', AuthUtils.validateToken, ReservationController.getAllReservation
 router.post('/', ReservationController.createReservation);
 
 router.get('/id/:id', ReservationController.getReservationById);
+router.get('/services/:id', ReservationController.getReservationServices);
 
 router.get('/date/:date', AuthUtils.validateToken, ReservationController.getReservationsOnDate);
 router.get('/user/:id', ReservationController.getReservationsForCustomer);
